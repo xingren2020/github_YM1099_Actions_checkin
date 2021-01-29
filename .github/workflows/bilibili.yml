@@ -1,0 +1,30 @@
+name: '哔哩哔哩'
+
+on:
+  schedule:
+    - cron: '0 4 * * *' #中午12:00执行，修改时注意时区
+  watch:
+    types: started
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    if: github.repository != 'happy888888/BiliExp' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v2
+        with: 
+          repository: happy888888/BiliExp
+          ref: master
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/run_in_Actions/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: 执行BiliExp
+        run: bash ./run_in_Actions/run_BiliExp.sh
+        env:
+          ADVCONFIG: ${{ secrets.BILI_ADVCONFIG }}
+          BILICONFIG: ${{ secrets.BILI_BILICONFIG }}
+          PUSH_MESSAGE: ${{ secrets.BILI_PUSH_MESSAGE }}
