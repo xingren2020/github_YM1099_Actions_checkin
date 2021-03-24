@@ -13,9 +13,8 @@ jobs:
     if: github.repository != 'happy888888/BiliExp' || github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v2
-        with: 
+        with:
           repository: happy888888/BiliExp
-          ref: master
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pip
